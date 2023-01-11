@@ -1,0 +1,11 @@
+table: user
+	colums
+		id, cpf, name, username, password, rememberMeToken, createdAt, 		updatedAt
+
+table: post
+	columns
+		id, title, description, createdBy, createdAt, updatedAt
+
+
+
+
