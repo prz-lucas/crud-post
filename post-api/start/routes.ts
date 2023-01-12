@@ -27,6 +27,8 @@ Route.group(() => {
   })
 
   Route.resource("/posts", "PostsController").apiOnly()
+  Route.resource("/users", "UsersController").apiOnly()
+  Route.post("/login", "AuthController.login")
 
 
 }).prefix('/api')

@@ -3,7 +3,7 @@ import User from 'App/Models/User'
 import CreateUser from './../../Validators/CreateUserValidator'
 
 export default class UsersController {
-    public async store({request}: HttpContextContract){
+    public async store({request, response}: HttpContextContract){
         const {username, password, fullName, cpf} = await request.validate(CreateUser)
 
         const user = await User.create({
@@ -13,6 +13,8 @@ export default class UsersController {
             cpf,
         })
 
+        response.status(201)
+        
         return{
             message: "Usuário criado com sucesso.",
             data: user
