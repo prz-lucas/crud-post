@@ -22,7 +22,7 @@ export default class CreateUserValidator {
       rules.required()
     ]),
     fullName: schema.string({}, [
-      rules.maxLength(100),
+      rules.maxLength(255),
       rules.minLength(3),
       rules.required()
     ]),

@@ -3,8 +3,13 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Post from 'App/Models/Post'
 
 export default class PostsController {
-
     public async store({request, response}: HttpContextContract) {
+
+
+        async ({ auth }) => {
+            await auth.use('web').authenticate()
+        }
+
         const body = request.body()
 
         const post = await Post.create(body)
@@ -15,8 +20,8 @@ export default class PostsController {
             message: "Seu post foi enviado!",
             data: post,
         }
-
     }
+
     public async index() {
         
         const posts = await Post.all()
