@@ -3,14 +3,19 @@ import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import Post from 'App/Models/Post'
 
 export default class PostsController {
-    public async store({request, response}: HttpContextContract) {
+    public async store({request, response, auth}: HttpContextContract) {
 
-
-        async ({ auth }) => {
-            await auth.use('web').authenticate()
+        try {
+            await auth.use('api').authenticate()
+        } catch (error) {
+            return{
+                error,
+                message: "Token inválido ou faltando."
+            } 
         }
 
         const body = request.body()
+        
 
         const post = await Post.create(body)
 
@@ -22,8 +27,17 @@ export default class PostsController {
         }
     }
 
-    public async index() {
+    public async index({auth}) {
         
+        try {
+            await auth.use('api').authenticate()
+        } catch (error) {
+            return{
+                error,
+                message: "Token inválido ou faltando."
+            } 
+        }
+
         const posts = await Post.all()
 
         return{
@@ -31,14 +45,26 @@ export default class PostsController {
         }
     }
 
-    public async update({params, request}: HttpContextContract){
+    public async update({params, request, auth}: HttpContextContract){
         
-        const body = request.body();
-        const post = await Post.findOrFail(params.id)
+        try {
+            await auth.use('api').authenticate()
+        } catch (error) {
+            return{
+                error,
+                message: "Token inválido ou faltando."
+            } 
+        }
 
-        post.title = body.title
+        const body = request.body();
+        const post = await Post.findOrFail(params.id);
+
+        post.title = body.title  
         post.description = body.description
 
+        
+
+        
         await post.save()
 
         return{
@@ -47,7 +73,18 @@ export default class PostsController {
         }
     }
 
-    public async destroy({params}: HttpContextContract){
+    public async destroy({params, auth}: HttpContextContract){
+        
+        try {
+            await auth.use('api').authenticate()
+        } catch (error) {
+            return{
+                error,
+                message: "Token inválido ou faltando."
+            } 
+        }
+               
+        
         const posts = await Post.findOrFail(params.id)
 
         await posts. delete(
